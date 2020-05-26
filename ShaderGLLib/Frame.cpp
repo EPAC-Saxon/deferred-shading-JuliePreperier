@@ -101,7 +101,14 @@ namespace sgl {
 
 	void Frame::DrawBuffers(const std::uint32_t size /*= 1*/)
 	{
-#pragma message ("You have to complete this code!")
+		assert(size < 9);
+		GLenum* buffers = new GLenum[size];
+		for (int i = 0; i < size;i++) {
+			buffers[i] = static_cast<GLenum>(Frame::GetFrameColorAttachment(i));
+
+		}
+		glDrawBuffers(size, buffers);
+		error_.Display(__FILE__, __LINE__ - 1);
 	}
 
 } // End namespace sgl.

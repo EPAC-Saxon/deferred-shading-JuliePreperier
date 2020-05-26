@@ -57,14 +57,22 @@ namespace sgl {
 
 	std::shared_ptr<Texture> Device::DrawTexture(const double dt)
 	{
-#pragma message ("You have to change this code!")
-		// Setup the camera.
-		SetupCamera();
-
 		auto texture = std::make_shared<Texture>(
 			size_,
 			PixelElementSize::FLOAT,
 			PixelStructure::RGB);
+
+		DrawMultiTextures({ texture }, dt);
+
+		return texture;
+	}
+
+	void Device::DrawMultiTextures(
+		const std::vector<std::shared_ptr<Texture>>& out_textures, 
+		const double dt)
+	{
+		SetupCamera();
+
 
 		Frame frame{};
 		Render render{};
@@ -81,7 +89,12 @@ namespace sgl {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		error_.Display(__FILE__, __LINE__ - 1);
 
-		frame.BindTexture(*texture);
+		for (int i = 0; i<out_textures.size();i++)
+		{
+			frame.BindTexture(*out_textures[i], Frame::GetFrameColorAttachment(i));
+		}
+
+		frame.DrawBuffers(out_textures.size());
 
 		for (const std::shared_ptr<Scene>& scene : scene_tree_)
 		{
@@ -98,14 +111,6 @@ namespace sgl {
 				view_,
 				scene->GetLocalModel(dt));
 		}
-		return texture;
-	}
-
-	void Device::DrawMultiTextures(
-		const std::vector<std::shared_ptr<Texture>>& out_textures, 
-		const double dt)
-	{
-#pragma message ("You have to complete this code!")
 	}
 
 	void Device::SetupCamera()
