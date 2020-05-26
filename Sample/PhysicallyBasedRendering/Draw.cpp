@@ -31,7 +31,25 @@ void Draw::Startup(const std::pair<std::uint32_t, std::uint32_t> size)
 	}
 	device_->SetSceneTree(scene_tree);
 
-#pragma message ("You have to complete this code!")
+	//The 4 texture for the deferred_textures_
+	auto albedo = std::make_shared<sgl::Texture>(size, sgl::PixelElementSize::FLOAT);
+	auto normal = std::make_shared<sgl::Texture>(size, sgl::PixelElementSize::FLOAT);
+	auto metallic_rough_AO = std::make_shared<sgl::Texture>(size, sgl::PixelElementSize::FLOAT);
+	auto position = std::make_shared<sgl::Texture>(size, sgl::PixelElementSize::FLOAT);
+
+	deferred_textures_.push_back(albedo);
+	deferred_textures_.push_back(normal);
+	deferred_textures_.push_back(metallic_rough_AO);
+	deferred_textures_.push_back(position);
+
+	//Create two empty textures (nullptr)
+	lighting_textures_.push_back(nullptr);
+	lighting_textures_.push_back(nullptr);
+
+	///Create a light manager
+	light_manager_ = CreateLightManager();
+	// create a light_program_
+	lighting_program_ = sgl::CreateProgram("Light");
 }
 
 const std::shared_ptr<sgl::Texture>& Draw::GetDrawTexture() const
@@ -49,7 +67,15 @@ void Draw::RunDraw(const double dt)
 	sgl::Camera cam(glm::vec3(position * rot_y), { 0.f, 0.f, 0.f });
 	device_->SetCamera(cam);
 
-#pragma message ("You have to complete this code!")
+	//First you need to check if the pbr_program_ is there or not.
+	if (pbr_program_ != nullptr) {
+		//Then you need to use it 
+		pbr_program_->Use();
+		//Set the uniform camera_position from the device
+		pbr_program_->UniformVector3("camera_position", device_->GetCamera().GetPosition());
+		//the first part of our deferred rendering by calling Device::DrawMultiTextures
+		device_->DrawMultiTextures(deferred_textures_, dt);
+	}
 }
 
 void Draw::Delete() {}
