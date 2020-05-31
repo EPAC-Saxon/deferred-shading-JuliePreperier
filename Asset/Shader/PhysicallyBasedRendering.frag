@@ -28,6 +28,7 @@ const float PI = 3.14159265359;
 // Don't worry if you don't get what's going on; you generally want to do normal 
 // mapping the usual way for performance anways; I do plan make a note of this 
 // technique somewhere later in the normal mapping tutorial.
+
 vec3 getNormalFromMap(vec3 normalMapPosition)
 {
     vec3 tangentNormal = normalMapPosition * 2.0 - 1.0;
@@ -46,25 +47,15 @@ vec3 getNormalFromMap(vec3 normalMapPosition)
 }
 
 // ----------------------------------------------------------------------------
-float GeometrySchlickGGX(float NdotV, float roughness)
-{
-    float r = (roughness + 1.0);
-    float k = (r * r) / 8.0;
 
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return nom / denom;
-}
-
-// ----------------------------------------------------------------------------
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
     return 
         F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }   
 
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
 void main()
 {
 #if 1
@@ -133,4 +124,5 @@ void main()
 	frag_normal = vec4(N, 1.0);
 	frag_mra = vec4(metallic, roughness, ao, 1.0);
 	frag_position = vec4(vert_world_position, 1.0);
+
 }

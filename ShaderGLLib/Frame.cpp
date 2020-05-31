@@ -106,7 +106,7 @@ namespace sgl {
 		//Then you must create an array with all the GL_COLOR_ATTACHMENT{n} needed
 		GLenum* buffers = new GLenum[size];
 		for (int i = 0; i < size;i++) {
-			buffers[i] = static_cast<GLenum>(Frame::GetFrameColorAttachment(i));
+			buffers[i] = GLenum(GL_COLOR_ATTACHMENT0 + i);
 
 		}
 		//Then you can call the glDrawBuffers

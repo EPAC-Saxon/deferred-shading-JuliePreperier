@@ -72,8 +72,8 @@ namespace sgl {
 		const std::vector<std::shared_ptr<Texture>>& out_textures, 
 		const double dt)
 	{
+		// Setup the camera.
 		SetupCamera();
-
 
 		Frame frame{};
 		Render render{};
@@ -91,9 +91,11 @@ namespace sgl {
 		error_.Display(__FILE__, __LINE__ - 1);
 
 		//You will need a loop to enter all the out_textures into the frame::BindTextures
-		for (int i = 0; i<out_textures.size();i++)
+		int it = 0;
+		for (const auto& tex : out_textures)
 		{
-			frame.BindTexture(*out_textures[i], Frame::GetFrameColorAttachment(i));
+			frame.BindTexture(*tex, Frame::GetFrameColorAttachment(it));
+			++it;
 		}
 		//Then you’ll need to frame::DrawBuffers
 		frame.DrawBuffers(out_textures.size());

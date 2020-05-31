@@ -96,8 +96,10 @@ void Draw::RunDraw(const double dt)
 		light_manager_->RegisterToProgram(lighting_program_);
 		// We now set the lighting_textures_[1] to the ComputeLighting
 		lighting_textures_[1] = ComputeLighting(deferred_textures_);
+		//We Combine them toghether.
+		auto combine = Combine(lighting_textures_);
 		//And AddBloom to the final_texture_
-		final_texture_ = AddBloom(lighting_textures_[1]);
+		final_texture_ = AddBloom(combine);
 	}
 }
 
