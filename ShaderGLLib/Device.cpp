@@ -57,13 +57,14 @@ namespace sgl {
 
 	std::shared_ptr<Texture> Device::DrawTexture(const double dt)
 	{
+		//Create an output texture.
 		auto texture = std::make_shared<Texture>(
 			size_,
 			PixelElementSize::FLOAT,
 			PixelStructure::RGB);
-
+		//Call the DrawMultiTexture
 		DrawMultiTextures({ texture }, dt);
-
+		//Return the texture
 		return texture;
 	}
 
@@ -89,11 +90,12 @@ namespace sgl {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		error_.Display(__FILE__, __LINE__ - 1);
 
+		//You will need a loop to enter all the out_textures into the frame::BindTextures
 		for (int i = 0; i<out_textures.size();i++)
 		{
 			frame.BindTexture(*out_textures[i], Frame::GetFrameColorAttachment(i));
 		}
-
+		//Then you’ll need to frame::DrawBuffers
 		frame.DrawBuffers(out_textures.size());
 
 		for (const std::shared_ptr<Scene>& scene : scene_tree_)

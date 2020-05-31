@@ -101,13 +101,17 @@ namespace sgl {
 
 	void Frame::DrawBuffers(const std::uint32_t size /*= 1*/)
 	{
+		//First you must check that the size is smaller than 9
 		assert(size < 9);
+		//Then you must create an array with all the GL_COLOR_ATTACHMENT{n} needed
 		GLenum* buffers = new GLenum[size];
 		for (int i = 0; i < size;i++) {
 			buffers[i] = static_cast<GLenum>(Frame::GetFrameColorAttachment(i));
 
 		}
+		//Then you can call the glDrawBuffers
 		glDrawBuffers(size, buffers);
+		//Don’t forget to test for errors
 		error_.Display(__FILE__, __LINE__ - 1);
 	}
 

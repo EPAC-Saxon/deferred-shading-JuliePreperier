@@ -99,7 +99,7 @@ void main()
     // reflectance equation
     vec3 Lo = vec3(0.0);
 
-    // ambient lighting (we now use IBL as the ambient term)
+     // ambient lighting (we now use IBL as the ambient term)
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
 
     vec3 kS = F;
@@ -120,6 +120,7 @@ void main()
     
     vec3 color = ambient + Lo;
 
+
     // deactivate the HDR as this is computed in the Bloom filter
 #if 0
     // HDR tonemapping
@@ -129,4 +130,7 @@ void main()
 #endif
 
     frag_ambient = vec4(color, 1.0);
+	frag_normal = vec4(N, 1.0);
+	frag_mra = vec4(metallic, roughness, ao, 1.0);
+	frag_position = vec4(vert_world_position, 1.0);
 }
